@@ -40,13 +40,13 @@ class GA:
     	return fitnesspop
 
     def Mutate(self, chromosome):
-        for num in range(0,random.randint(1,3)):
-            index = random.randint(0, self.weights)
-            if random.random() >= 0.5:
-                chromosome[index] = chromosome[index] + (chromosome[index] * 0.25)
-            else:
-                chromosome[index] = chromosome[index] - (chromosome[index] * 0.25)
-        return chromosome
+        for num in range(0,random.randint(1,len(chromosome))):
+    		index = random.randint(0,len(chromosome)-1)
+    		if random.random() >= 0.5:
+    			chromosome[index] = chromosome[index] + random.random()
+    		else:
+    			chromosome[index] = chromosome[index] - random.random()
+    	return chromosome
 
     def Crossover(self, chromosome1, chromosome2):
         if self.weights == 1:
