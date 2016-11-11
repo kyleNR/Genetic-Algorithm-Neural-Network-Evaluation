@@ -10,6 +10,7 @@ benchmarkinfos.txt
 exampleexperiment.py
 exampletiming.py
 
-# Ignore Compiled Files
+# Ignore File Types
 *.pyc
 *.txt
+*~
