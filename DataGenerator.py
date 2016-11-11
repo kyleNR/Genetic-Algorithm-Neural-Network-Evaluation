@@ -12,9 +12,11 @@ import fgeneric
 import bbobbenchmarks
 import os
 
+argv = sys.argv[1:]
+
 datapath = 'DataGen'
 
-dataLength = 10 #Number of sets of data
+dataLength = 100 if len(argv) < 1 else int(argv[0])  #Number of sets of data
 dim = 2 #Number of Dimension
 fun_id = 1 #Function ID to use with COCO
 
@@ -36,12 +38,13 @@ def DataLog(fun_id, dim):
         file_.write(line)
 
 def DataLogAllFun(dim):
-    for fid in range(1,24):
+    for fid in range(1,25):
         f.setfun(*bbobbenchmarks.instantiate(fid, 1))
         DataLog(fid, dim)
 
 f = fgeneric.LoggingFunction(datapath)
-f.setfun(*bbobbenchmarks.instantiate(fun_id, 1))
+f.setfun(*bbobbenchmarks.instantiate(fun_id, 0))
 
 #DataLog(fun_id, dim)
-DataLogAllFun(dim)
+for dim in [2,4,8]:
+    DataLogAllFun(dim)

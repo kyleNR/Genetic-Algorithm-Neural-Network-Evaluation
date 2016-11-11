@@ -10,10 +10,10 @@ class GA:
     def __init__(self,
                 weights,
                 function,
-                elitism=True,
                 generations=300,
                 population_size=50,
-                mutate_chance=0.50,):
+                mutate_chance=0.50,
+                elitism=True):
         self.elitism = elitism
         self.generations = generations
         self.population_size = population_size
@@ -88,10 +88,10 @@ class GA:
             if fbest > fvalues[idx[0]]:
                 fbest = fvalues[idx[0]]
                 bestChromosome = pop[idx[0]]
-                print "   Gen: %d\tNew Lowest Cost: %f" % (gen,fbest)
+                #print "   Gen: %d\tNew Lowest Cost: %.8f" % (gen,fbest)
             if fbest < 1e-8:  # task achieved
                 break
-        print "LOWEST OUTPUT COST: %.8f" % (self.function(bestChromosome))
+        #print "LOWEST OUTPUT COST: %.8f" % (self.function(bestChromosome))
         return bestChromosome
 
     def Run(self):
@@ -103,6 +103,6 @@ def GetBestWeights(weightNum, function):
     ga = GA(weightNum, function)
     return ga.Run()
 
-def GetBestWeightsFull(elitism, generations, population_size, mutate_chance, weightNum, function):
-    ga = GA(elitism, generations, population_size, mutate_chance, weightNum, function)
+def GetBestWeightsFull(weightNum, function, generations, population_size, mutate_chance, elitism):
+    ga = GA(weightNum, function, generations, population_size, mutate_chance, elitism)
     return ga.Run()

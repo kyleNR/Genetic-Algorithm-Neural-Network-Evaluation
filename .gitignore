@@ -1,9 +1,7 @@
 # Ignore Training Data
-FunctionData/
-DataGen/
+*/
 
 # Ignore COCO Files
-bbob_pproc/
 fgeneric.py
 bbobbenchmarks.py
 benchmarkinfos.txt
