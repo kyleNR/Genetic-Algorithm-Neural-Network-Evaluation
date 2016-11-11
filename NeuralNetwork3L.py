@@ -2,21 +2,18 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import sys
 import GeneticAlgorithm as ga
-
-argv = sys.argv[1:]
-
-X = np.array(([3,5], [5,1], [10,2]), dtype=float)
-y = np.array(([75], [82], [93]), dtype=float)
 
 # Whole Class with additions:
 class Neural_Network(object):
-    def __init__(self):
+    def __init__(self, fun_id, scaleValue):
         #Define Hyperparameters
         self.inputLayerSize = 2
         self.outputLayerSize = 1
         self.hiddenLayerSize = 3
+        self.fun_id = fun_id
+        self.scaleValue = scaleValue
+        self.testData = self.loadFile()
 
         #Weights (parameters)
         self.W1 = np.random.randn(self.inputLayerSize,self.hiddenLayerSize)
@@ -24,37 +21,36 @@ class Neural_Network(object):
 
     def forward(self, X):
         #Propagate inputs through network
+        #X = self.descale(X)
         self.z2 = np.dot(X, self.W1)
-        self.a2 = self.sigmoid(self.z2)
+        self.a2 = self.tanH(self.z2)
         self.z3 = np.dot(self.a2, self.W2)
-        yHat = self.sigmoid(self.z3)
+        yHat = self.tanH(self.z3)
+        return self.scale(yHat)
         return yHat
 
     def sigmoid(self, z):
         #Apply sigmoid activation function to scalar, vector, or matrix
         return 1/(1+np.exp(-z))
 
-    def sigmoidPrime(self,z):
-        #Gradient of sigmoid
-        return np.exp(-z)/((1+np.exp(-z))**2)
+    def tanH(self, z):
+        #Apply sigmoid activation function to scalar, vector, or matrix
+        return (2/(1 + np.exp(-2 * z))) - 1
+
+    def scale(self, z):
+        return z * self.scaleValue
+
+    def descale(self, z):
+        x2 = []
+        for x in z:
+            x2.append(x / self.scaleValue)
+        return x2
 
     def costFunction(self, X, y):
         #Compute cost for given X,y, use weights already stored in class.
         self.yHat = self.forward(X)
         J = 0.5*sum((y-self.yHat)**2)
         return J
-
-    def costFunctionPrime(self, X, y):
-        #Compute derivative with respect to W and W2 for a given X and y:
-        self.yHat = self.forward(X)
-
-        delta3 = np.multiply(-(y-self.yHat), self.sigmoidPrime(self.z3))
-        dJdW2 = np.dot(self.a2.T, delta3)
-
-        delta2 = np.dot(delta3, self.W2.T)*self.sigmoidPrime(self.z2)
-        dJdW1 = np.dot(X.T, delta2)
-
-        return dJdW1, dJdW2
 
     def setWeights(self, weights):
         d1 = len(self.W1)
@@ -82,9 +78,14 @@ class Neural_Network(object):
             else:
                 self.W2 = np.append(self.W2, [arrayList[i]], axis = 0)
 
-    def weightTest(self, input_, weights):
+    def weightTest(self, weights):
         self.setWeights(weights)
-        return self.forward(input_)
+        cost = 0.
+        for dataSet in self.testData:
+            setInput = dataSet[:-1]
+            setOutput = dataSet[-1:]
+            cost = cost + self.costFunction(setInput, setOutput)
+        return cost
 
     def weightAmount(self):
         amount = 0
@@ -92,13 +93,20 @@ class Neural_Network(object):
         amount = amount + (len(self.W2) * len(self.W2[0]))
         return amount
 
+    def loadFile(self):
+        filename = "FunctionData/DATA-FunID-%d-DIM-%d" % (self.fun_id, self.inputLayerSize)
+        file_ = open(filename, 'r')
+        testData = []
+        for line in file_:
+            testData.append([float(x.strip()) for x in line.split(', ')])
+        return testData
 
-NN = Neural_Network()
-print "INPUT: (3, 5)"
-input_ = np.array(([3/5,5/5]), dtype=float)
+NN = Neural_Network(1, 100)
+print "INPUT: (%f, %f)" % (-0.504408146844,0.428269435691)
+input_ = np.array(([-0.504408146844,0.428269435691]), dtype=float)
 print "OUTPUT: %.8f" % NN.forward(input_)
 
-newWeights = ga.GetBestWeights(NN.weightAmount(), input_, (1/2), NN.weightTest)
+newWeights = ga.GetBestWeights(NN.weightAmount(), NN.weightTest)
 NN.setWeights(newWeights)
 print "TRAINED OUTPUT: %.8f" % NN.forward(input_)
-print "INTENDED OUTPUT: %.8f" % (1/2)
+print "INTENDED OUTPUT: %.8f" % (-78.982882327)

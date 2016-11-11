@@ -9,30 +9,23 @@ class GA:
     # Config Options
     def __init__(self,
                 weights,
-                functionInput,
-                targetOutput,
                 function,
-                elitism=False,
-                generations=50,
-                population_size=20,
+                elitism=True,
+                generations=300,
+                population_size=50,
                 mutate_chance=0.50,):
         self.elitism = elitism
         self.generations = generations
         self.population_size = population_size
         self.mutate_chance = mutate_chance
         self.weights = weights
-        self.functionInput = functionInput
-        self.targetOutput = targetOutput
         self.function = function
 
     def InitialGeneration(self):
-        return np.random.rand(self.population_size, self.weights) * (random.randint(100, 500))
+        return 10. * np.random.rand(self.population_size, self.weights) - 5.
 
     def Fitness(self, chromosome):
-        difference = self.function(self.functionInput, chromosome) / self.targetOutput
-        if difference < 0:
-            difference = difference * -1
-        #print "Difference: %0.5f" % difference
+        difference = self.function(chromosome)
         return difference
 
     def PopFitness(self, pop):
@@ -45,9 +38,9 @@ class GA:
         for num in range(0,random.randint(1,len(chromosome))):
             index = random.randint(0,len(chromosome)-1)
             if random.random() >= 0.5:
-                chromosome[index] = chromosome[index] + random.random()
+                chromosome[index] = chromosome[index] * 1.25
             else:
-                chromosome[index] = chromosome[index] - random.random()
+                chromosome[index] = chromosome[index] * 0.75
         return chromosome
 
     def Crossover(self, chromosome1, chromosome2):
@@ -61,12 +54,12 @@ class GA:
 
     def TournamentSelection(self, pop):
         parents = np.random.choice(self.population_size,4)
-        if self.Fitness(pop[parents[0]]) >= self.Fitness(pop[parents[1]]):
+        if self.Fitness(pop[parents[0]]) <= self.Fitness(pop[parents[1]]):
             parent1 = pop[parents[0]]
         else:
             parent1 = pop[parents[1]]
 
-        if self.Fitness(pop[parents[2]]) >= self.Fitness(pop[parents[3]]):
+        if self.Fitness(pop[parents[2]]) <= self.Fitness(pop[parents[3]]):
             parent2 = pop[parents[2]]
         else:
             parent2 = pop[parents[3]]
@@ -89,15 +82,16 @@ class GA:
     def NewGeneration(self, pop):
         fbest = np.inf
         for gen in range(self.generations):
+            pop = self.Evolve(pop)
             fvalues = self.PopFitness(pop)
             idx = np.argsort(fvalues)
-            print "Best Output: %.5f" % fvalues[idx[0]]
             if fbest > fvalues[idx[0]]:
                 fbest = fvalues[idx[0]]
                 bestChromosome = pop[idx[0]]
+                print "   Gen: %d\tNew Lowest Cost: %f" % (gen,fbest)
             if fbest < 1e-8:  # task achieved
                 break
-            pop = self.Evolve(pop)
+        print "LOWEST OUTPUT COST: %.8f" % (self.function(bestChromosome))
         return bestChromosome
 
     def Run(self):
@@ -105,10 +99,10 @@ class GA:
         return self.NewGeneration(pop)
 
 
-def GetBestWeights(weightNum, functionInput, targetOutput, function):
-    ga = GA(weightNum, functionInput, targetOutput, function)
+def GetBestWeights(weightNum, function):
+    ga = GA(weightNum, function)
     return ga.Run()
 
-def GetBestWeightsFull(elitism, generations, population_size, mutate_chance, weightNum, functionInput, targetOutput, function):
-    ga = GA(elitism, generations, population_size, mutate_chance, weightNum, functionInput, targetOutput, function)
+def GetBestWeightsFull(elitism, generations, population_size, mutate_chance, weightNum, function):
+    ga = GA(elitism, generations, population_size, mutate_chance, weightNum, function)
     return ga.Run()
