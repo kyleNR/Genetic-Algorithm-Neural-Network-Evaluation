@@ -11,6 +11,7 @@ Place Files inside [COCO](http://coco.gforge.inria.fr/) python folder
 
 ##Configuration
 Edit DataGenerator.py to change dataset or use command line argument:
+
 1.  Number of sets of data
 ```
 python DataGenerator.py
@@ -18,6 +19,7 @@ python DataGenerator.py 50
 ```
 
 Edit NNCompareexperiment.py to change GA attributes or use command line arguments:
+
 1.  Generations
 2.  Population Size
 3.  Mutation Chance (float)
