@@ -20,16 +20,23 @@ import NeuralNetworkControl as NNC
 
 argv = sys.argv[1:] # shortcut for input arguments
 
-datapath = 'NNCompare' if len(argv) < 1 else argv[0]
+generations = 500 if len(argv) < 1 else int(argv[0])
+population_size = 50 if len(argv) < 2 else int(argv[1])
+mutate_chance = 0.25 if len(argv) < 3 else float(argv[2])
+elitism = True if len(argv) < 4 else argv[3] == "True"
 
-dimensions = [2,4,8] if len(argv) < 2 else eval(argv[1])
-function_ids = [1]
+datapath = 'NNCompare'
+fileLocation = "NNCOMPAREDATA"
+if not os.path.exists(fileLocation):
+    os.makedirs(fileLocation)
+dimensions = [2,4,8]
+function_ids = [1,2,3]
 # function_ids = bbobbenchmarks.noisyIDs if len(argv) < 3 else eval(argv[2])
 #instances = range(1, 6) if len(argv) < 4 else eval(argv[3])
-instances = range(1, 6) + range(41, 51) if len(argv) < 4 else eval(argv[3])
+instances = range(1, 6) + range(41, 51)
 
 opts = dict(algid='NN Against Monte Carlo',
-            comments='')
+            comments='Generations: %d  Population Size: %d  Mutation Chance: %0.2f  Elitism: %r  ' % (generations, population_size, mutate_chance, elitism))
 maxfunevals = '10 * dim' # 10*dim is a short test-experiment taking a few minutes
 # INCREMENT maxfunevals SUCCESSIVELY to larger value(s)
 minfunevals = 'dim + 2'  # PUT MINIMAL sensible number of EVALUATIONS before to restart
@@ -102,9 +109,9 @@ f = fgeneric.LoggingFunction(datapath, **opts)
 for dim in dimensions:  # small dimensions first, for CPU reasons
     for fun_id in function_ids:
         nn = NNC.PickNN(dim, fun_id)
-        nn.train(500, 50, 0.25, True)
+        nn.train(generations, population_size, mutate_chance, elitism)
         for iinstance in instances:
-            filename = "NNCOMPAREDATA/DATA-FunID-%d-DIM-%d-INSTANCE-%d" % (fun_id, dim, iinstance)
+            filename = fileLocation + "/DATA-FunID-%d-DIM-%d-INSTANCE-%d" % (fun_id, dim, iinstance)
             file_ = open(filename, 'w')
 
             f.setfun(*bbobbenchmarks.instantiate(fun_id, iinstance=iinstance))

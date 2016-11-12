@@ -81,6 +81,7 @@ class GA:
 
     def NewGeneration(self, pop):
         fbest = np.inf
+        bestChromosome = pop[0]
         for gen in range(self.generations):
             pop = self.Evolve(pop)
             fvalues = self.PopFitness(pop)
@@ -88,10 +89,8 @@ class GA:
             if fbest > fvalues[idx[0]]:
                 fbest = fvalues[idx[0]]
                 bestChromosome = pop[idx[0]]
-                #print "   Gen: %d\tNew Lowest Cost: %.8f" % (gen,fbest)
             if fbest < 1e-8:  # task achieved
                 break
-        #print "LOWEST OUTPUT COST: %.8f" % (self.function(bestChromosome))
         return bestChromosome
 
     def Run(self):

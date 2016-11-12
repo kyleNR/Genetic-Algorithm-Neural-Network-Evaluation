@@ -17,8 +17,7 @@ argv = sys.argv[1:]
 datapath = 'DataGen'
 
 dataLength = 100 if len(argv) < 1 else int(argv[0])  #Number of sets of data
-dim = 2 #Number of Dimension
-fun_id = 1 #Function ID to use with COCO
+dim = [2,4,8] #List of Dimensions to save
 
 fileLocation = "FunctionData"
 
@@ -37,14 +36,14 @@ def DataLog(fun_id, dim):
         line = line + str(f.evalfun(xpop)) + "\n"
         file_.write(line)
 
-def DataLogAllFun(dim):
+def DataLogAllFun(dimNum):
     for fid in range(1,25):
         f.setfun(*bbobbenchmarks.instantiate(fid, 1))
-        DataLog(fid, dim)
+        DataLog(fid, dimNum)
 
 f = fgeneric.LoggingFunction(datapath)
 f.setfun(*bbobbenchmarks.instantiate(fun_id, 0))
 
-#DataLog(fun_id, dim)
-for dim in [2,4,8]:
-    DataLogAllFun(dim)
+
+for dimNum in dim:
+    DataLogAllFun(dimNum)

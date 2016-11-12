@@ -6,6 +6,7 @@ import NeuralNetwork4L as NN4
 import NeuralNetwork5L as NN5
 
 def PickNN(dim, fun_id):
+	"""
 	if dim == 2:
 		return NN4.Run(fun_id, dim)
 	if dim == 4:
@@ -14,3 +15,5 @@ def PickNN(dim, fun_id):
 		return NN4.Run(fun_id, dim)
 	else:
 		return None
+	"""
+	return NN5.Run(fun_id, dim)
