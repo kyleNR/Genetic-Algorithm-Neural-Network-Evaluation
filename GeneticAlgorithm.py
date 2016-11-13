@@ -35,7 +35,7 @@ class GA:
         return fitnesspop
 
     def Mutate(self, chromosome):
-        for num in range(0,random.randint(1,len(chromosome))):
+        for num in range(random.randint(1,len(chromosome))):
             index = random.randint(0,len(chromosome)-1)
             if random.random() >= 0.5:
                 chromosome[index] = chromosome[index] * 1.25

@@ -11,4 +11,7 @@ exampletiming.py
 # Ignore File Types
 *.pyc
 *.txt
+*.aux
+*.log
+*.tex
 *~

@@ -20,22 +20,30 @@ class Neural_Network(object):
         self.W4 = np.random.randn(self.hiddenLayerSize3,self.outputLayerSize)
 
     def forward(self, X):
-        X = self.descale(X)
+        #X = self.descale(X)
         self.z2 = np.dot(X, self.W1)
-        self.a2 = self.tanH(self.z2)
+        #self.a2 = self.tanH(self.z2)
+        self.a2 = self.bentId(self.z2)
         self.z3 = np.dot(self.a2, self.W2)
-        self.a3 = self.tanH(self.z3)
+        #self.a3 = self.tanH(self.z3)
+        self.a3 = self.bentId(self.z3)
         self.z4 = np.dot(self.a3, self.W3)
-        self.a4 = self.tanH(self.z4)
+        #self.a4 = self.tanH(self.z4)
+        self.a4 = self.bentId(self.z4)
         self.z5 = np.dot(self.a4, self.W4)
-        yHat = self.tanH(self.z5)
-        return self.scale(yHat)
+        #yHat = self.tanH(self.z5)
+        yHat = self.bentId(self.z5)
+        #return self.scale(yHat)
+        return yHat
 
     def sigmoid(self, z):
         return 1/(1+np.exp(-z))
 
     def tanH(self, z):
         return (2/(1 + np.exp(-2 * z))) - 1
+
+    def bentId(self, z):
+        return ((np.sqrt((z**2) + 1) - 1) / 2) + z
 
     def scale(self, z):
         return z * self.scaleValue
