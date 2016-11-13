@@ -16,4 +16,4 @@ def PickNN(dim, fun_id):
 	else:
 		return None
 	"""
-	return NN5.Run(fun_id, dim)
+	return NN3.Run(fun_id, dim)

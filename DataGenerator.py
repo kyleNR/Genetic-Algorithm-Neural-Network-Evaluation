@@ -17,7 +17,7 @@ argv = sys.argv[1:]
 datapath = 'DataGen'
 
 dataLength = 100 if len(argv) < 1 else int(argv[0])  #Number of sets of data
-dim = [2,4,8] #List of Dimensions to save
+dim = [2,3,5] #List of Dimensions to save
 
 fileLocation = "FunctionData"
 
@@ -42,8 +42,6 @@ def DataLogAllFun(dimNum):
         DataLog(fid, dimNum)
 
 f = fgeneric.LoggingFunction(datapath)
-f.setfun(*bbobbenchmarks.instantiate(fun_id, 0))
-
-
+#f.setfun(*bbobbenchmarks.instantiate(fun_id, 0))
 for dimNum in dim:
     DataLogAllFun(dimNum)

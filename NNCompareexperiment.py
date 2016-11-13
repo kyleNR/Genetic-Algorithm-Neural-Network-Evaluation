@@ -26,8 +26,8 @@ mutate_chance = 0.25 if len(argv) < 3 else float(argv[2])
 elitism = True if len(argv) < 4 else argv[3] == "True"
 
 datapath = 'NNCompare'
-dimensions = [2,4,8]
-function_ids = [1,2,3]
+dimensions = [2,3,5]
+function_ids = [1]
 # function_ids = bbobbenchmarks.noisyIDs if len(argv) < 3 else eval(argv[2])
 #instances = range(1, 6) if len(argv) < 4 else eval(argv[3])
 instances = range(1, 6) + range(41, 51)
