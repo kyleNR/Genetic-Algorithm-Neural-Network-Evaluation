@@ -23,6 +23,8 @@ exampletiming.py
 !NNCOMPAREDATA
 !ppdata
 !Report
+!Report/*.pdf
+!Report/*.tex
 
 # Keep Data Report
 !NNGAData.*
