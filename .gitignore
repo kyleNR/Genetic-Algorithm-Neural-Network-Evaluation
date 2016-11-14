@@ -16,6 +16,7 @@ exampletiming.py
 *.tex
 *.gz
 *.cls
+*.out
 *~
 
 # Keep Data

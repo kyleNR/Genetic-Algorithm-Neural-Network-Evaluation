@@ -25,6 +25,56 @@
 
 	\newpage
 	\pagenumbering{arabic}
+\section{Introduction}
+
+This report attempts to explain and evaluate the decisions behind our implementations of the Artificial Neural Network(ANN) and Evolutionary Algorithm(EA) that we have developed for this project.
+
+\subsection{Evolutionary Algorithm}
+
+Evolutionary Algorithms attempt to simulate the real world evolution process on a population of possible solutions to the problem that is being worked on.
+
+For our implementation we use the Genetic Algorithm(GA) type of evolutionary algorithm as it seeks the solution by performing a variety of evolutionary methods to the population such as 
+
+\begin{itemize}
+
+\item Selection Method
+\item Crossover
+\item Mutation
+
+\end{itemize}
+
+
+\subsubsection{General Description of Algorithm}
+
+Our genetic algorithm follows the traditional flow in terms of the order in which its evolutionary processes are applied to the genotypes.
+
+\begin{enumerate}
+
+\item Generate Initial random population.
+\item Assign fitness values to each member of the population accordingly.
+\item Use selection method to determine which chromosomes will reproduce.
+\item Use crossover to produce an offspring from the winners of the tournaments.
+\item If chosen apply mutation to the child.
+\end{enumerate}
+
+Steps 2 - 5 are repeated until we reach the intended number of generations. We then take the best result that we have found and use those weights as the weights within the neural network.
+
+
+\subsection{Implementation Decisions}
+
+Our implementation contains a number 
+
+Within our algorithm each genotype in the population represents the set of weights that will be used in the neural network.
+
+Our algorithm attempts to minimise the difference between the results returned by the neural network compared to the actual intended output.
+
+Our encoding of the chromosomes represents the weights within the neural network. We value encoding as opposed to a traditional binary approach as we needed the solution to be usable by our neural network. 
+
+If our implementation was essentially a brute force optimisation we would be guaranteed to find very good results given enough time. The issue with this vein however is that this solution is generally far too slow to be of any use. Whereas if we only select the best results from each iteration we will conversely get rather terrible results quite quickly. 
+
+Therefore our algorithm attempts to balance between always selecting the best results from the population and just performing a random search over our population. This should ensure that our implementation produces good results within a relatively fast time period, Ideally we shall discover the global minima within our search space.
+
+\newpage
 \section{Experiment}
 \subsection{Neural Network}
 \subsubsection{Topology}
@@ -39,7 +89,7 @@ The activation functions used in the network were switched around a lot until ul
 The GA (Genetic Algorithm) uses a list to hold the weights for the NN (Neural Network). Although this is different from the matrix structure used within the network, it allows the GA to be used on any topology of NN. 
 
 \subsubsection{Selection}
-Tournament was the selection method chosen to be used in the GA. It takes 4 random chromosomes and finds the fittest out of the first two, and the fittest of the second two. With the two chromosomes to uses the crossover method to create a child to go into the population of the next generation. It was used as the selection method as it has been proven to be effective\cite{FoundationsOfGA}. Although a larger amount of comparisons could be done to reduce the number of generations needed to reach a local minimum, it was decided to trade this to achieve a better time to run the program in.\\\\
+Tournament was the selection method chosen to be used in the GA. It takes 4 random chromosomes and finds the fittest out of the first two, and the fittest of the second two. With the two chromosomes to uses the crossover method to create a child to go into the population of the next generation. It was used as the selection method as it has been proven to be effective\cite{FoundationsOfGA}\cite{GAComparison}. Although a larger amount of comparisons could be done to reduce the number of generations needed to reach a local minimum, it was decided to trade this to achieve a better time to run the program in.\\\\
 Elitism is keeping the best chromosome of every generation and adding it to the next generation. It was added to the GA to allow it to reach a local minimum faster and also to stop the GA regressing if the population does not find a better fitness. While it is possible to use elitism to more than one chromosome between generations, it was chosen to only keep one, as it would keep the fitness from decreasing without cause the variety in chromosomes to stagnate.
 
 \subsubsection{Modification}
@@ -70,7 +120,9 @@ The Dimensions chosen to compare the COCO functions with the NN are 2,3,5. The d
 \section{Results}
 \subsection{Finding Best Weights}
 \subsubsection{Settings}
-Elitism provided the best values as it never regressed in fitness. When disabled, the population's fitness could and in most cases regress backwards in some generations.
+Elitism provided the best values as it never regressed in fitness. When disabled, the population's fitness could and in most cases regress backwards in some generations.\\
+The Mutation Chance only affected the accuracy slightly. It stayed around the same value as long as it was greater than 0.1. \\
+Population Size and Generations both caused the error to decrease but at a cost of time running the program. 
 
 \subsection{Compare Functions}
 \subsubsection{Parameters}
@@ -94,26 +146,65 @@ Running the NNCompare program took 1.34 hours to fully complete. This included t
 
 \subsubsection{Error}
 The error between functions varies quite a lot between the function being used to test. Originally the goal was to have an accuracy of $1$ x $10^{-8}$. This was quickly proven to be not possible for us. \\\\
-The average error over the 3 dimensions and 24 function is 71673030.893774. This is calculated\\
+The mean optimised error over the 3 dimensions and 24 function is 71673030.893774. This is calculated\\
+
+\quad\textbf{Unoptimised results}\\
 
 \textbf{Dimension Error Breakdown}
 \begin{itemize}
-	\item Dim: 2 - Average Error: 180162184.663644
-	\item Dim: 3 - Average Error: 64892443.572706
-	\item Dim: 5 - Average Error: 32345721.778468
+\item Dim: 2  Mean Error: 66528724.344014
+\item Dim: 3  Mean Error: 34583987.854396
+\item Dim: 5  Mean Error: 37929540.188898
 \end{itemize}
 
 \textbf{Function Error Breakdown}
 \begin{itemize}
-	\item Function: 1  Mean Error: 164.804346
-	\item Function: 2  Mean Error: 10896935.209143
-	\item Function: 3  Mean Error: 1294.011928
-	\item Function: 4  Mean Error: 1276.370219
-	\item Function: 5  Mean Error: 375.322413
-	\item Function: 6  Mean Error: 272930.882969
-	\item Function: 7  Mean Error: 702.017186
-	\item Function: 8  Mean Error: 114860.286929
-	\item Function: 9  Mean Error: 56482.608131
+	\item Function:  1  Mean Error: 179.916752
+	\item Function:  2  Mean Error: 13327474.628473
+	\item Function:  3  Mean Error: 1304.319599
+	\item Function:  4  Mean Error: 1641.492063
+	\item Function:  5  Mean Error: 405.481184
+	\item Function:  6  Mean Error: 347381.234899
+	\item Function:  7  Mean Error: 784.458142
+	\item Function:  8  Mean Error: 133708.078350
+	\item Function:  9  Mean Error: 68374.590549
+	\item Function: 10  Mean Error: 19299998.622307
+	\item Function: 11  Mean Error: 15837652.352132
+	\item Function: 12  Mean Error: 861228409.180600
+	\item Function: 13  Mean Error: 1639.564259
+	\item Function: 14  Mean Error: 199.024445
+	\item Function: 15  Mean Error: 631.727322
+	\item Function: 16  Mean Error: 185.872345
+	\item Function: 17  Mean Error: 212.611501
+	\item Function: 18  Mean Error: 321.394856
+	\item Function: 19  Mean Error: 296.492377
+	\item Function: 20  Mean Error: 57159.200084
+	\item Function: 21  Mean Error: 262.516522
+	\item Function: 22  Mean Error: 375.160063
+	\item Function: 23  Mean Error: 123.937418	
+	\item Function: 24  Mean Error: 242.677308
+\end{itemize}
+
+\quad\textbf{Optimised results}\\
+
+\textbf{Dimension Error Breakdown}
+\begin{itemize}
+	\item Dim: 2  Mean Error: 180162184.663644	
+	\item Dim: 3  Mean Error: 64892443.572706
+	\item Dim: 5  Mean Error: 32345721.778468
+\end{itemize}
+
+\textbf{Optimised Function Error Breakdown}
+\begin{itemize}
+	\item Function:  1  Mean Error: 164.804346
+	\item Function:  2  Mean Error: 10896935.209143
+	\item Function:  3  Mean Error: 1294.011928
+	\item Function:  4  Mean Error: 1276.370219
+	\item Function:  5  Mean Error: 375.322413	
+	\item Function:  6  Mean Error: 272930.882969
+	\item Function:  7  Mean Error: 702.017186
+	\item Function:  8  Mean Error: 114860.286929
+	\item Function:  9  Mean Error: 56482.608131
 	\item Function: 10  Mean Error: 15736200.667834
 	\item Function: 11  Mean Error: 15228843.708646
 	\item Function: 12  Mean Error: 733934812.030683
@@ -127,15 +218,51 @@ The average error over the 3 dimensions and 24 function is 71673030.893774. This
 	\item Function: 20  Mean Error: 47965.536369
 	\item Function: 21  Mean Error: 251.182707
 	\item Function: 22  Mean Error: 926.811691
-	\item Function: 23  Mean Error: 121.188542
+	\item Function: 23  Mean Error: 121.188542	
 	\item Function: 24  Mean Error: 233.393122
 \end{itemize}
+
+\newpage
+\section{Discussion}
+Our results show that our implementation of the network and algorithm does improve the error between our actual and intended results. 
+
+However while our results show that optimisation has occurred in the large majority of cases they also show that our solution does not approximate the intended function as well as we would have hoped.
+
+Depending on the function being examined we return wildly different mean error results. This generally means that the more complex the function that is being approximated the less effective our genetic algorithm is. This is shown by our algorithms very poor performance for the functions 11,12 and 22, those being the discus,bent cigar and Gallagher's Gaussian 21-hi Peaks Function functions accordingly.
+
+Our neural network could possibly have fallen victim to the problem of over fitting to our input data. This would mean that our network responds very well to its training data but fails to generalise well. This could be caused by the topology of our network, due to the fact it includes several hidden layers between the input and output. It may be too deep for what we want it to do. This is problem is tricky to solve as we could reduce the complexity of our network however this may lead to it not being complex enough to find all of the information that it needs to find a solution.
+
+
+\newpage
+\section{Conclusion}
+
+We have established in this report that evolutionary algorithms, in our case a genetic algorithm, prove to be an effective solution to the problem of neural network weight optimisation. 
+
+Our results show that our genetic algorithm tends to miss the global minima and as such cannot be described as an exact algorithm, that is one that is guaranteed to reach the best fitness solution within the search space. The term used to describe our algorithm is an approximate function, one that attempt to find near optimal solutions within an acceptable time-frame. 
+
+This coincides with the results found within \cite{GlobalOpt} that neural networks are good at finding solutions to complex non-linear functions. This journal article also states that genetic algorithms are good at finding global minima due to the fact that their solutions search in various different directions at once.
+
+However back propagation continues to be extensively used in various real world practices. We can see how this has occurred by looking at our results. Our experimental data showed that the performance of our algorithm generally decreased as the dimension of the problem increased. This means that problems that input a vast quantity of data are one of the various cases in which back propagation generally outperforms genetic algorithms as the time it would take for  the algorithm to optimize the large number of weights in this problem would be far to long to be of any particular use.
+
+With more time we could attempt to improve the performance of the genetic algorithm. A quick improvement that could be applied would be to vastly increase the dataset that helps train the neural network.
+
+From this project we have learned how to properly assess the performance of a genetic algorithm. We performed this through analysis of the results produced by the COCO black-box platform. By comparing our results to the results obtained from COCO we have been able to produce a suitable benchmark of our genetic algorithm.
+
+We have also learned that the topology of a neural network can play a part in its performance. A topology that is too complex for the problem may lead to over-fitting while a network that is too simple may lead to the network failing to capture the information required to solve to problem.
+
+Additionally we learned that our relative lack of experience with the benchmarking software, the COCO package, has lead to various set-backs and restarts in the project. We could have mitigated this factor by sufficiently reading the COCO documentation and examining the limited on-line examples before starting the project. This would have given us a wealth of knowledge on the COCO black box system and would have prevented us falling into the preventable pitfalls that hindered our progress.
 
 
 \newpage
 \begin{thebibliography}{9}
 \bibitem{FoundationsOfGA} 
 G. Rawlins, Foundations of genetic algorithms, 1st ed. San Mateo, Calif.: M. Kaufmann Publishers, 1991, pp. 78-82.
+
+\bibitem{GAComparison}
+F. Vavak and T. Fogarty, "Comparison of steady state and generational genetic algorithms for use in nonstationary environments", Proceedings of IEEE International Conference on Evolutionary Computation.
+
+\bibitem{GlobalOpt} 
+Randall Sexton,Robert E. Dorsey,John D. Johnson, ‘Toward global optimization of neural networks: A comparison of the genetic algorithm and backpropagation’, Decision Support Systems, Iss. 22, vol. 2, 1998, pp. 171-185.
 \end{thebibliography}
 
 \end{document}
