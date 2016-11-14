@@ -11,6 +11,8 @@
 	\centering
 	\vspace*{4cm}
 	{\Large Biologically Inspired Computation \par}
+	\vspace{0.5cm}
+	{\Large F20BC \par}
 	\vspace{2cm}
 	{\huge\bfseries Coursework 1 \par}
 	\vspace{2cm}
@@ -31,8 +33,7 @@ This report attempts to explain and evaluate the decisions behind our implementa
 
 \subsection{Evolutionary Algorithm}
 
-Evolutionary Algorithms attempt to simulate the real world evolution process on a population of possible solutions to the problem that is being worked on.
-
+Evolutionary Algorithms attempt to simulate the real world evolution process on a population of possible solutions to the problem that is being worked on.\\\\
 For our implementation we use the Genetic Algorithm(GA) type of evolutionary algorithm as it seeks the solution by performing a variety of evolutionary methods to the population such as 
 
 \begin{itemize}
@@ -62,55 +63,51 @@ Steps 2 - 5 are repeated until we reach the intended number of generations. We t
 
 \subsection{Implementation Decisions}
 
-Our implementation contains a number 
-
-Within our algorithm each genotype in the population represents the set of weights that will be used in the neural network.
-
-Our algorithm attempts to minimise the difference between the results returned by the neural network compared to the actual intended output.
-
-Our encoding of the chromosomes represents the weights within the neural network. We value encoding as opposed to a traditional binary approach as we needed the solution to be usable by our neural network. 
-
-If our implementation was essentially a brute force optimisation we would be guaranteed to find very good results given enough time. The issue with this vein however is that this solution is generally far too slow to be of any use. Whereas if we only select the best results from each iteration we will conversely get rather terrible results quite quickly. 
-
-Therefore our algorithm attempts to balance between always selecting the best results from the population and just performing a random search over our population. This should ensure that our implementation produces good results within a relatively fast time period, Ideally we shall discover the global minima within our search space.
+Our code contains a number of features than make the implementation unique: \\\\
+The algorithm attempts to minimise the difference between the results returned by the neural network compared to the actual intended output.\\\\
+Within our algorithm each genotype in the population represents the set of weights that will be used in the neural network.\\\\
+We encode the chromosomes to represent the weights within the neural network. We use value encoding as opposed to a traditional binary approach as we needed the solution to be usable by our neural network. \\\\
+If our implementation was essentially a brute force optimisation we would be guaranteed to find very good results given enough time. The issue with this vein however is that this solution is generally far too slow to be of any use. Whereas if we only select the best results from each iteration we will conversely get poor results quite quickly. \\\\
+Therefore our algorithm attempts to balance between always selecting the best results from the population, through tournament selection, and just performing a random search over our population, through mutation. This should ensure that our implementation produces good results within a relatively fast time period, Ideally we shall discover the global minima within our search space  however this is unlikely due to the approximate function nature of a genetic algorithm and the limited time given to run.
 
 \newpage
 \section{Experiment}
 \subsection{Neural Network}
 \subsubsection{Topology}
-The Neural Network was created to be able to change easily. This ultimately meant an input parameter being used to define the size of the input layer to allow it to calculate a function with any possible dimension size.\\\\
-The final topology of the network was an input layer of size dimension, a hidden layer of size 4, another hidden layer of size 3 and an output layer of size 1.
+The Neural Network implementation was designed to be able to be changed easily. This ultimately meant an input parameter being used to define the size of the input layer dynamically to allow it to calculate a function with any possible dimension size.\\\\
+The final topology of the network was an input layer of size dimension, a hidden layer of size 4, another hidden layer of size 3 and an output layer of size 1.\\\\
+This topology was chosen as it could replicate a function well without creating a higher time cost and no notable error reduction.
 
 \subsubsection{Activation Function}
 The activation functions used in the network were switched around a lot until ultimately we decided to use the Bent Identity function to allow an output size from $\infty$ to -$\infty$ without scaling the output. 
 
 \subsection{Genetic Algorithm}
 \subsubsection{Data Representation}
-The GA (Genetic Algorithm) uses a list to hold the weights for the NN (Neural Network). Although this is different from the matrix structure used within the network, it allows the GA to be used on any topology of NN. 
+The GA (Genetic Algorithm) uses a list of real numbers to hold the weights for the NN (Neural Network). Although this is different from the matrix structure used within the network, it allows the GA to be used on any topology of NN. 
 
 \subsubsection{Selection}
-Tournament was the selection method chosen to be used in the GA. It takes 4 random chromosomes and finds the fittest out of the first two, and the fittest of the second two. With the two chromosomes to uses the crossover method to create a child to go into the population of the next generation. It was used as the selection method as it has been proven to be effective\cite{FoundationsOfGA}\cite{GAComparison}. Although a larger amount of comparisons could be done to reduce the number of generations needed to reach a local minimum, it was decided to trade this to achieve a better time to run the program in.\\\\
-Elitism is keeping the best chromosome of every generation and adding it to the next generation. It was added to the GA to allow it to reach a local minimum faster and also to stop the GA regressing if the population does not find a better fitness. While it is possible to use elitism to more than one chromosome between generations, it was chosen to only keep one, as it would keep the fitness from decreasing without cause the variety in chromosomes to stagnate.
+Tournament selection was the selection method chosen to be implemented. It takes 4 random chromosomes and finds the fittest out of the first two, and the fittest of the second two. With the two winning chromosomes it uses crossover to create a child to go into the population of the next generation. It was used as the selection method as it has been proven to be effective\cite{FoundationsOfGA}\cite{GAComparison}. Although a larger Tournament size could be used to reduce the number of generations needed to reach a local minimum, it was decided to trade this to achieve a better time to run the program in.\\\\
+We use Elitism to keep the best chromosome of every generation and adding it to the next generation. It allows it to reach a local minimum faster and also to stop the GA regressing if the population does not find a better fitness. While it is possible to use elitism of more than one chromosome between generations a size of one was chosen as it would keep the fitness from decreasing without harming genetic diversity.
 
 \subsubsection{Modification}
-The GA uses a Two-point crossover for its crossover function. This is a simple 	method, although slightly more complex as a One-point crossover method. It takes two points as indexes, takes the first parent up to that point and after the second point, then takes the second parent between the two points to create a full child. While this could have been used to create two children, it was decided to use this to only create one to create a larger degree of diversity in the population.\\\\
-The mutation function is basic but effective at slight variations in the output. It takes the chromosome and loops randomly between 1 and up to the number of weights. In the loop it selects a random weight and multiplies it by either 0.75 or 1.25. \\\\
+The GA uses a Two-point crossover for its crossover function. This is a simple method, although slightly more complex than One-point crossover. It takes two points as indexes, takes the first parent up to that point and after the second point, then takes the second parent between the two points to create a full child. While this could have been used to create two children, it was decided to use this to only create one to create a larger degree of diversity in the population.\\\\
+The mutation function is basic but effective at slight variations in the output. It takes the chromosome and loops randomly between 1 and the number of weights in the chromosome. In the loop it selects a random weight and multiplies it by either 0.75 or 1.25. \\\\
 The mutation chance is the probability that the child created with the crossover function will be mutated before being added to the new population.
 
 \subsubsection{Generations}
 The generations is the number of iterations for the GA to run through. It is set as a default value of 200.
 
-\subsubsection{Population}
-The generations is the number of chromosome to use in each generation in the GA. It is set as a default value of 50.
+\subsubsection{Population Size}
+The population size is the number of chromosomes to use in each generation in the GA. It is set as a default value of 50.
 
-\subsubsection{Data Set}
-The size of the dataset used to train the GA is set with the DataGenerator file. Higher the number of sets of data the GA will train with, the more accurate it can be theoretically. In reality the accuracy is based much more on the Generation, Population, and Mutation Chance size. The larger the dataset, the longer the GA will take to train as each fitness test will take longer.
+\subsubsection{Training Data Set}
+The size of the dataset used to train the GA is set with the \textit{DataGenerator} file. The higher the number of sets of data the GA will train with, the more accurate it can be theoretically. In reality the accuracy is based much more on the Generation, Population, and Mutation Chance size. The larger the dataset, the longer the GA will take to train as each fitness test will take longer.
 
 \subsection{Neural Network Compare}
-The Experiment to compare the Neural Network against the COCO functions was set using the exampleexperiment.py file from COCO. This file will train the Neural Network based of the dimensions and functions given before running and comparing each pair of functions.
+The Experiment to compare the Neural Network against the COCO functions was set using the \textit{exampleexperiment} file from COCO. This file will train the Neural Network based of the dimensions and functions given before running and comparing each pair of functions.
 
 \subsubsection{Functions}
-The functions chosen to compare against COCO were the Sphere, Ellipsoidal, and Rastrigin functions. These are represented in COCO with the function IDs of 1,2,3. Although only these were used, the Neural Network has the capacity to be compared on all 24 noiseless functions, if given the data.
+The functions chosen to compare against COCO were the noiseless functions. These are represented in COCO with the function IDs from 1 to 24.
 
 \subsubsection{Dimensions}
 The Dimensions chosen to compare the COCO functions with the NN are 2,3,5. The dimensions were chosen to keep the time to run the experiment down while also being compatible with COCOs post-processing. The Neural Network can handle any size of dimension, but the time to evolve the weights will increase in relation.
@@ -122,7 +119,7 @@ The Dimensions chosen to compare the COCO functions with the NN are 2,3,5. The d
 \subsubsection{Settings}
 Elitism provided the best values as it never regressed in fitness. When disabled, the population's fitness could and in most cases regress backwards in some generations.\\
 The Mutation Chance only affected the accuracy slightly. It stayed around the same value as long as it was greater than 0.1. \\
-Population Size and Generations both caused the error to decrease but at a cost of time running the program. 
+Population Size and Generations both caused the error to decrease but at a cost of time running the program. Generations caused only a minor increase in accuracy about 30.
 
 \subsection{Compare Functions}
 \subsubsection{Parameters}
@@ -142,11 +139,11 @@ Population Size and Generations both caused the error to decrease but at a cost 
 \end{itemize}
 
 \subsubsection{Time}
-Running the NNCompare program took 1.34 hours to fully complete. This included the time spent Training the network for each dimension and function and running the Monte Carlo selection optimisation. More accurate results may have been attained by using higher parameters for generations, population size and dataset size but this would have resulted in the program running for longer.
+Running the \textit{NNCompare} program took 1.34 hours to fully complete. This included the time spent Training the network for each dimension and function and running the Monte Carlo selection optimisation. More accurate results may have been attained by using higher parameters for generations, population size and dataset size but this would have resulted in the program running for longer.
 
 \subsubsection{Error}
 The error between functions varies quite a lot between the function being used to test. Originally the goal was to have an accuracy of $1$ x $10^{-8}$. This was quickly proven to be not possible for us. \\\\
-The mean optimised error over the 3 dimensions and 24 function is 71673030.893774. This is calculated\\
+The mean optimised error over the 3 dimensions and 24 function is 71673030.893774.\\
 
 \quad\textbf{Unoptimised results}\\
 
@@ -224,32 +221,22 @@ The mean optimised error over the 3 dimensions and 24 function is 71673030.89377
 
 \newpage
 \section{Discussion}
-Our results show that our implementation of the network and algorithm does improve the error between our actual and intended results. 
-
-However while our results show that optimisation has occurred in the large majority of cases they also show that our solution does not approximate the intended function as well as we would have hoped.
-
-Depending on the function being examined we return wildly different mean error results. This generally means that the more complex the function that is being approximated the less effective our genetic algorithm is. This is shown by our algorithms very poor performance for the functions 11,12 and 22, those being the discus,bent cigar and Gallagher's Gaussian 21-hi Peaks Function functions accordingly.
-
+Our results show that our implementation of the network and algorithm does improve the error between our actual and intended results. \\\\
+However while our results show that optimisation has occurred in the large majority of cases they also show that our solution does not approximate the intended function as well as we would have hoped.\\\\
+Depending on the function being examined we return wildly different mean error results. This generally means that the more complex the function that is being approximated the less effective our genetic algorithm is. This is shown by our algorithms very poor performance for the functions 11,12 and 22, those being the Discus, Bent Cigar and Gallagher's Gaussian 21-hi Peaks Function functions accordingly.\\\\
 Our neural network could possibly have fallen victim to the problem of over fitting to our input data. This would mean that our network responds very well to its training data but fails to generalise well. This could be caused by the topology of our network, due to the fact it includes several hidden layers between the input and output. It may be too deep for what we want it to do. This is problem is tricky to solve as we could reduce the complexity of our network however this may lead to it not being complex enough to find all of the information that it needs to find a solution.
 
 
 \newpage
 \section{Conclusion}
 
-We have established in this report that evolutionary algorithms, in our case a genetic algorithm, prove to be an effective solution to the problem of neural network weight optimisation. 
-
-Our results show that our genetic algorithm tends to miss the global minima and as such cannot be described as an exact algorithm, that is one that is guaranteed to reach the best fitness solution within the search space. The term used to describe our algorithm is an approximate function, one that attempt to find near optimal solutions within an acceptable time-frame. 
-
-This coincides with the results found within \cite{GlobalOpt} that neural networks are good at finding solutions to complex non-linear functions. This journal article also states that genetic algorithms are good at finding global minima due to the fact that their solutions search in various different directions at once.
-
-However back propagation continues to be extensively used in various real world practices. We can see how this has occurred by looking at our results. Our experimental data showed that the performance of our algorithm generally decreased as the dimension of the problem increased. This means that problems that input a vast quantity of data are one of the various cases in which back propagation generally outperforms genetic algorithms as the time it would take for  the algorithm to optimize the large number of weights in this problem would be far to long to be of any particular use.
-
-With more time we could attempt to improve the performance of the genetic algorithm. A quick improvement that could be applied would be to vastly increase the dataset that helps train the neural network.
-
-From this project we have learned how to properly assess the performance of a genetic algorithm. We performed this through analysis of the results produced by the COCO black-box platform. By comparing our results to the results obtained from COCO we have been able to produce a suitable benchmark of our genetic algorithm.
-
-We have also learned that the topology of a neural network can play a part in its performance. A topology that is too complex for the problem may lead to over-fitting while a network that is too simple may lead to the network failing to capture the information required to solve to problem.
-
+We have established in this report that evolutionary algorithms, in our case a genetic algorithm, prove to be an effective solution to the problem of neural network weight optimisation. \\\\
+Our results show that our genetic algorithm tends to miss the global minima and as such cannot be described as an exact algorithm, that is one that is guaranteed to reach the best fitness solution within the search space. The term used to describe our algorithm is an approximate function, one that attempt to find near optimal solutions within an acceptable time-frame. \\\\
+This coincides with the results found within \cite{GlobalOpt} that neural networks are good at finding solutions to complex non-linear functions. This journal article also states that genetic algorithms are good at finding global minima due to the fact that their solutions search in various different directions at once.\\\\
+However back propagation continues to be extensively used in various real world practices. We can see how this has occurred by looking at our results. Our experimental data showed that the performance of our algorithm generally decreased as the dimension of the problem increased. This means that problems that input a vast quantity of data are one of the various cases in which back propagation generally outperforms genetic algorithms as the time it would take for  the algorithm to optimize the large number of weights in this problem would be far to long to be of any particular use.\\\\
+With more time we could attempt to improve the performance of the genetic algorithm. A quick improvement that could be applied would be to vastly increase the dataset that helps train the neural network.\\\\
+From this project we have learned how to properly assess the performance of a genetic algorithm. We performed this through analysis of the results produced by the COCO black-box platform. By comparing our results to the results obtained from COCO we have been able to produce a suitable benchmark of our genetic algorithm.\\\\
+We have also learned that the topology of a neural network can play a part in its performance. A topology that is too complex for the problem may lead to over-fitting while a network that is too simple may lead to the network failing to capture the information required to solve to problem.\\\\
 Additionally we learned that our relative lack of experience with the benchmarking software, the COCO package, has lead to various set-backs and restarts in the project. We could have mitigated this factor by sufficiently reading the COCO documentation and examining the limited on-line examples before starting the project. This would have given us a wealth of knowledge on the COCO black box system and would have prevented us falling into the preventable pitfalls that hindered our progress.
 
 
