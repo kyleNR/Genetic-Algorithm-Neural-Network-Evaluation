@@ -10,7 +10,7 @@ Place Files inside [COCO](http://coco.gforge.inria.fr/) python folder
 2.  Run *NNCompareexperiment.py* to run 
 
 ##Configuration
-Edit DataGenerator.py to change dataset or use command line argument:
+Edit *DataGenerator.py* to change dataset or use command line argument:
 
 1.  Number of sets of data
 ```
@@ -18,7 +18,7 @@ python DataGenerator.py
 python DataGenerator.py 50
 ```
 
-Edit NNCompareexperiment.py to change GA attributes or use command line arguments:
+Edit *NNCompareexperiment.py* to change GA attributes or use command line arguments:
 
 1.  Generations
 2.  Population Size
@@ -28,6 +28,11 @@ Edit NNCompareexperiment.py to change GA attributes or use command line argument
 NNCompareexperiment.py
 NNCompareexperiment.py 500 50 0.25 True
 ```
+
+##Further Experiments
+1.  Run *ResultNNCompareexperiment.py* to to run the NN experiment and also log the average error between functions to a separate folder
+
+2.  Run *ResultsAnalyser.py* to analyse the results gathered from *ResultNNCompareexperiment.py*
 
 ##Credits
 Coursework by
