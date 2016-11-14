@@ -1,0 +1,9 @@
+funcId = 20, DIM = 2, Precision = 1.000e-08, algId = 'NN Comparison using Monte Carlo Search'
+% Generations: 200  Population Size: 30  Mutation Chance: 0.25  Elitism: True  
+data_f20/bbobexp_f20_DIM2.dat, 1:20|1.9e+00, 2:20|3.3e+00, 3:20|3.0e+00, 4:20|2.5e+00, 5:20|2.0e+00, 41:20|3.8e+00, 42:20|3.0e+00, 43:20|4.3e+00, 44:20|4.4e+02, 45:20|5.7e+00, 46:20|4.7e+00, 47:20|2.7e+00, 48:20|4.5e+00, 49:20|4.0e+01, 50:20|4.3e+00
+funcId = 20, DIM = 3, Precision = 1.000e-08, algId = 'NN Comparison using Monte Carlo Search'
+% Generations: 200  Population Size: 30  Mutation Chance: 0.25  Elitism: True  
+data_f20/bbobexp_f20_DIM3.dat, 1:30|5.1e+01, 2:30|3.6e+00, 3:30|1.5e+01, 4:30|3.2e+00, 5:30|1.2e+03, 41:30|3.5e+00, 42:30|3.2e+00, 43:30|3.1e+00, 44:30|3.7e+00, 45:30|3.7e+00, 46:30|7.2e+01, 47:30|4.2e+00, 48:30|1.5e+02, 49:30|1.3e+00, 50:30|6.6e+02
+funcId = 20, DIM = 5, Precision = 1.000e-08, algId = 'NN Comparison using Monte Carlo Search'
+% Generations: 200  Population Size: 30  Mutation Chance: 0.25  Elitism: True  
+data_f20/bbobexp_f20_DIM5.dat, 1:50|3.5e+00, 2:50|3.2e+02, 3:50|3.8e+02, 4:50|1.5e+02, 5:50|4.7e+00, 41:50|1.3e+03, 42:50|3.1e+00, 43:50|2.9e+03, 44:50|8.3e+00, 45:50|1.7e+02, 46:50|1.6e+03, 47:50|2.2e+03, 48:50|2.3e+01, 49:50|5.0e+00, 50:50|1.7e+03

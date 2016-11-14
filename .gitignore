@@ -14,4 +14,15 @@ exampletiming.py
 *.aux
 *.log
 *.tex
+*.gz
+*.cls
 *~
+
+# Keep Data
+!NNCompare
+!NNCOMPAREDATA
+!ppdata
+!Report
+
+# Keep Data Report
+!NNGAData.*

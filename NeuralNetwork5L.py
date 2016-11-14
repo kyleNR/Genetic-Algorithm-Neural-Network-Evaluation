@@ -20,20 +20,14 @@ class Neural_Network(object):
         self.W4 = np.random.randn(self.hiddenLayerSize3,self.outputLayerSize)
 
     def forward(self, X):
-        #X = self.descale(X)
         self.z2 = np.dot(X, self.W1)
-        #self.a2 = self.tanH(self.z2)
         self.a2 = self.bentId(self.z2)
         self.z3 = np.dot(self.a2, self.W2)
-        #self.a3 = self.tanH(self.z3)
         self.a3 = self.bentId(self.z3)
         self.z4 = np.dot(self.a3, self.W3)
-        #self.a4 = self.tanH(self.z4)
         self.a4 = self.bentId(self.z4)
         self.z5 = np.dot(self.a4, self.W4)
-        #yHat = self.tanH(self.z5)
         yHat = self.bentId(self.z5)
-        #return self.scale(yHat)
         return yHat
 
     def sigmoid(self, z):
@@ -44,15 +38,6 @@ class Neural_Network(object):
 
     def bentId(self, z):
         return ((np.sqrt((z**2) + 1) - 1) / 2) + z
-
-    def scale(self, z):
-        return z * self.scaleValue
-
-    def descale(self, z):
-        x2 = []
-        for x in z:
-            x2.append(x / self.scaleValue)
-        return x2
 
     def costFunction(self, X, y):
         self.yHat = self.forward(X)
@@ -130,15 +115,9 @@ class Neural_Network(object):
         filename = "FunctionData/DATA-FunID-%d-DIM-%d" % (self.fun_id, self.inputLayerSize)
         file_ = open(filename, 'r')
         testData = []
-        scaleValue = 0
         for line in file_:
             tempList = [float(x.strip()) for x in line.split(', ')]
-            if tempList[len(tempList) - 1] > scaleValue:
-                scaleValue = tempList[len(tempList) - 1]
             testData.append(tempList)
-        self.scaleValue = 2 * int(scaleValue)
-        print "SCALE VALUE: ",
-        print self.scaleValue
         return testData
 
     def train(self, generations=100, popsize=50, mutate_chance=0.33, elitism=True):

@@ -20,19 +20,18 @@ import NeuralNetworkControl as NNC
 
 argv = sys.argv[1:] # shortcut for input arguments
 
-generations = 500 if len(argv) < 1 else int(argv[0])
+generations = 200 if len(argv) < 1 else int(argv[0])
 population_size = 50 if len(argv) < 2 else int(argv[1])
 mutate_chance = 0.25 if len(argv) < 3 else float(argv[2])
 elitism = True if len(argv) < 4 else argv[3] == "True"
 
 datapath = 'NNCompare'
 dimensions = [2,3,5]
-function_ids = [1]
-# function_ids = bbobbenchmarks.noisyIDs if len(argv) < 3 else eval(argv[2])
-#instances = range(1, 6) if len(argv) < 4 else eval(argv[3])
+#function_ids = [1,2,3]
+function_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
 instances = range(1, 6) + range(41, 51)
 
-opts = dict(algid='NN Against Monte Carlo',
+opts = dict(algid='NN Comparison using Monte Carlo Search',
             comments='Generations: %d  Population Size: %d  Mutation Chance: %0.2f  Elitism: %r  ' % (generations, population_size, mutate_chance, elitism))
 maxfunevals = '10 * dim' # 10*dim is a short test-experiment taking a few minutes
 # INCREMENT maxfunevals SUCCESSIVELY to larger value(s)
@@ -69,7 +68,6 @@ def COMPARENN(fun, x, maxfunevals, ftarget, nn):
         fvalues = fun(xpop)
         nnvalues = nnfun(xpop, nn)
         idx = np.argsort(fvalues)
-        nnidx = np.argsort(nnvalues)
         for i in range(len(fvalues)):
             compareCount = compareCount + 1
             err = (fvalues[i] - nnvalues[i])
@@ -82,10 +80,6 @@ def COMPARENN(fun, x, maxfunevals, ftarget, nn):
         if fbest < ftarget:  # task achieved
             break
     avgErr = (total_err / compareCount)
-    print "Total Error Between COCO and NN: ",
-    print total_err,
-    print "Average Error: ",
-    print avgErr
     return avgErr
 
 def nnfun(xpop, nn):
